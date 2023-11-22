@@ -7,12 +7,11 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'SavedNotes.dart';
-import 'audioRecord.dart';
 import 'chatAi.dart';
 
 class Journal extends StatefulWidget {
-  const Journal({Key? key}) : super(key: key);
-
+  const Journal({Key? key, required this.id}) : super(key: key);
+final String id;
   @override
   State<Journal> createState() => _JournalState();
 }
@@ -98,7 +97,7 @@ Color _color=Colors.white;
           ],
           backgroundColor: Colors.white,
         ),
-        body: Container(
+        body: SizedBox(
           width: we,
           height: he,
           child: Padding(
@@ -178,15 +177,15 @@ Color _color=Colors.white;
                                   });
                                 },
                                 onHorizontalDragEnd: (details) {
-                                  if (details.primaryVelocity! > 0) {
-                                    print('swiped');
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const RecordAudio()),
-                                    );
-                                  }
+                                  // if (details.primaryVelocity! > 0) {
+                                  //   print('swiped');
+                                  //   Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             const RecordAudio()),
+                                  //   );
+                                  // }
                                 },
                               child: Row(
                                 children: [
@@ -208,7 +207,7 @@ Color _color=Colors.white;
                                   ),
                                   Container(
                                     alignment: Alignment.center,
-                                    width: MediaQuery.of(context).size.width*0.76,
+                                    width: MediaQuery.of(context).size.width*0.75,
                                     child: TextField(
                                       controller: _textEditingController,
                                       decoration: const InputDecoration(
@@ -300,7 +299,7 @@ Color _color=Colors.white;
                   isBlurred = false;
                 });
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => const Chat()));
+                    context, MaterialPageRoute(builder: (_) =>  Chat(feeling: widget.id,)));
               },
             ),
             Bubble(

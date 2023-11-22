@@ -60,3 +60,4 @@ class NoteProvider with ChangeNotifier {
     Note.noteList.add(finalNotes);
   }
 }
+

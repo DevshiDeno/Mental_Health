@@ -104,7 +104,7 @@ class _FeelingScreenState extends State<FeelingScreen>
                       subtitle: Text(
                         widget.id,
                         style: const TextStyle(
-                          fontSize: 18.0,
+                          fontSize:20.0,
                           color: Colors.grey,
                           fontFamily: 'Roboto',
                         ),
@@ -132,7 +132,6 @@ class _FeelingScreenState extends State<FeelingScreen>
   }
 
   Widget buildBody(context) {
-    var he = MediaQuery.of(context).size.height;
     var we = MediaQuery.of(context).size.width;
     return Column(
       children: [
@@ -146,7 +145,7 @@ class _FeelingScreenState extends State<FeelingScreen>
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const Journal()),
+                        MaterialPageRoute(builder: (_) =>  Journal(id: widget.id,)),
                       );
                     },
                     child: Container(
@@ -376,10 +375,10 @@ class _FeelingScreenState extends State<FeelingScreen>
           onPressed: () {
             showModalBottomSheet(
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0),
-                  ),
+                borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+            topRight: Radius.circular(20.0),
+            )
                 ),
                 context: context,
                 builder: (context) => CustomBottomSheet(

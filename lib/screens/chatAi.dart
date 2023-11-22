@@ -6,7 +6,9 @@ import 'package:mental_health/Components/test.dart';
 import 'package:provider/provider.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({super.key});
+  const Chat({super.key, required this.feeling});
+
+  final String feeling;
 
   @override
   State<Chat> createState() => _ChatState();
@@ -30,6 +32,9 @@ class _ChatState extends State<Chat> with SingleTickerProviderStateMixin {
     print(response);
     setState(() {
       generatedAnswer = response?.choices.first.text;
+      loading = false;
+      final chatData = Provider.of<ChatDataProvider>(context, listen: false);
+      chatData.addChatMessage(userQuestion!, generatedAnswer!);
     });
     print(generatedAnswer);
   }
@@ -37,11 +42,15 @@ class _ChatState extends State<Chat> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this);
-    openAI = OpenAI.instance.build(
-        token: api,
-        baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 5)),
-        enableLog: true);
+    if (userQuestion == null) {
+      userQuestion = 'I am feeling ${widget.feeling}';
+      _controller = AnimationController(vsync: this);
+      openAI = OpenAI.instance.build(
+          token: api,
+          baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 5)),
+          enableLog: true);
+      _generateAnswer();
+    }
   }
 
   @override
@@ -52,7 +61,6 @@ class _ChatState extends State<Chat> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final chatData = Provider.of<ChatDataProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -62,8 +70,7 @@ class _ChatState extends State<Chat> with SingleTickerProviderStateMixin {
           icon: Icon(Icons.arrow_back_ios),
         ),
       ),
-      body: Stack(
-          children: [
+      body: Stack(children: [
         Image.network(
           "https://images.unsplash.com/photo-1583511655826-05700d52f4d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=388&q=80",
           fit: BoxFit.cover,
@@ -72,13 +79,19 @@ class _ChatState extends State<Chat> with SingleTickerProviderStateMixin {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height*0.8,
-          decoration: BoxDecoration(),
+          height: MediaQuery.of(context).size.height * 0.87,
+          decoration: const BoxDecoration(
+
+          ),
           child: ListView.builder(
+            reverse: false,
+              shrinkWrap: true,
               itemCount: ChatData.messages.length,
               itemBuilder: (context, index) {
                 final QA = ChatData.messages[index];
-                return Column(children: [
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                   ChatBubble(text: QA.userQuestion!, isUser1: false),
                   SizedBox(height: 10),
                   // FutureBuilder(
@@ -88,57 +101,47 @@ class _ChatState extends State<Chat> with SingleTickerProviderStateMixin {
                   //           ConnectionState.waiting) {
                   //         return ChatBubble(text: '...', isUser1: true);
                   //       }
-                  ChatBubble(text: QA.generatedAnswer!, isUser1: true),
+                  //       return ChatBubble(
+                  //           text: QA.generatedAnswer!, isUser1: true);
+                  //     }),
+                ChatBubble(
+                text: QA.generatedAnswer!, isUser1: true)
+
                 ]);
               }),
         ),
-        if (userQuestion == null)
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: TextFormField(
-              controller: _textEditingController,
-              decoration: const InputDecoration(
-                iconColor: Colors.black,
-                prefixIcon:  Icon(Icons.photo_camera),
-                suffixIcon: Icon(Icons.mic),
-                hintText: "Type a message...",
-               // hintStyle: ,
-               // Adjust the padding as needed
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: TextFormField(
+            controller: _textEditingController,
+            decoration: InputDecoration(
+              iconColor: Colors.black,
+              prefixIcon: const Icon(Icons.photo_camera),
+              suffixIcon: IconButton(onPressed: (){}, icon:
+              Icon(loading ?Icons.stop_circle_outlined : Icons.mic)
               ),
-              onFieldSubmitted: (value) async {
-                if (value.isNotEmpty) {
-                  setState(() {
-                    userQuestion = value;
-                  });
-                  _textEditingController.text = '';
-                  await _generateAnswer();
-                  chatData.addChatMessage(value, generatedAnswer!);
-                }
-                setState(() {
-                  userQuestion = null;
-                });
-              },
+              hintText: !loading ? "Type a message..." : 'Generating',
+              // hintStyle: ,
+              // Adjust the padding as needed
             ),
+            onFieldSubmitted: (value) async {
+              if (value.isNotEmpty && value != userQuestion) {
+                setState(() {
+                  userQuestion = value;
+                  loading = true;
+                });
+                _textEditingController.text = '';
+                await _generateAnswer();
+                // chatData.addChatMessage(value, generatedAnswer!);
+              }
+              setState(() {
+                //userQuestion = null;
+              });
+            },
           ),
-        if (userQuestion != null)
-          Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: TextFormField(
-                controller: _textEditingController,
-                decoration: const InputDecoration(
-                  iconColor: Colors.black,
-                  prefixIcon:  Icon(Icons.photo_camera),
-                  suffixIcon: Icon(Icons.mic),
-                  hintText: "Generating...",
-                  // hintStyle: ,
-                  // Adjust the padding as needed
-                ),
-              ),
-          ),
+        ),
       ]),
     );
   }
