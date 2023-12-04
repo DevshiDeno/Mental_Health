@@ -47,6 +47,11 @@ dependencies:
   flex_color_scheme: ^7.2.0
   flutter_rating_bar: ^4.0.1
   chat_gpt_sdk: ^2.2.5
+  cached_network_image: ^3.3.0
+  microphone: ^0.1.0
+  audioplayers: ^5.2.1
+  speech_to_text_google_dialog: ^0.0.5
+
 
 
 dev_dependencies:

@@ -42,12 +42,17 @@ class SecondProvider extends ChangeNotifier {
 }
 
 class ChatDataProvider with ChangeNotifier {
-  void addChatMessage(String question, String answer) {
+  void addChatMessage(String question) {
     final chatMessage =
-        ChatData(userQuestion: question, generatedAnswer: answer);
+        ChatData(userQuestion: question);
     ChatData.messages.add(chatMessage);
   }
+  void addChatAnswer(String answer){
+    final chatAnswer=ChatData(generatedAnswer: answer);
+    ChatData.answers.add(chatAnswer);
+  }
 }
+
 
 class NoteProvider with ChangeNotifier {
   bool containsNote(String writtenNotes, DateTime currentdate) {

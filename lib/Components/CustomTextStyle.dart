@@ -10,7 +10,7 @@ class CustomTextStyle {
   static const TextStyle medium = TextStyle(
     fontFamily: 'Oswald',
     fontSize: 20,
-    color: Colors.white,
+    color: Colors.black,
     fontWeight: FontWeight.w700,
   );
 

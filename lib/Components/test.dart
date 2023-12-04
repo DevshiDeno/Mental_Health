@@ -1,7 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
-
 class ChatBubble extends StatefulWidget {
   final String text;
   final bool isUser1;
@@ -12,23 +11,24 @@ class ChatBubble extends StatefulWidget {
   State<ChatBubble> createState() => _ChatBubbleState();
 }
 
-class _ChatBubbleState extends State<ChatBubble> with SingleTickerProviderStateMixin {
-   late AnimationController _controller;
+class _ChatBubbleState extends State<ChatBubble>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
 
-   @override
-   void initState() {
-     super.initState();
-     _controller = AnimationController(
-       vsync: this,
-       duration: const Duration(milliseconds: 100),
-     );
-     _controller.addStatusListener((status) {
-       if (status == AnimationStatus.completed) {
-         _controller.stop();
-       }
-     });
-     _controller.forward();
-   }
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.stop();
+      }
+    });
+    _controller.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _ChatBubbleState extends State<ChatBubble> with SingleTickerProviderStateM
             ),
             child: AnimatedBuilder(
               animation: _controller,
-              builder: ( context, child) {
+              builder: (context, child) {
                 return DefaultTextStyle(
                     style: const TextStyle(),
                     child: AnimatedTextKit(

@@ -1,6 +1,9 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:mental_health/Providers/Provider_home.dart';
+import 'package:mental_health/screens/Journal.dart';
+import 'package:mental_health/screens/audioRecord.dart';
+import 'package:mental_health/screens/chatAi.dart';
 import 'package:mental_health/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +32,7 @@ class MyApp extends StatelessWidget {
       theme: FlexThemeData.light(scheme: FlexScheme.mandyRed),
       darkTheme: FlexThemeData.dark(scheme: FlexScheme.wasabi),
       themeMode: ThemeMode.system,
-      home:  const HomeScreen()
+      home:   HomeScreen()
     );
   }
 }

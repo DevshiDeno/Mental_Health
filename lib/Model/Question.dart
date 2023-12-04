@@ -7,5 +7,5 @@ bool isUser1=false;
      this.generatedAnswer
 });
   static List<ChatData>messages=[];
-
+  static List<ChatData>answers=[];
 }

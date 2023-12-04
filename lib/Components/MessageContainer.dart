@@ -1,28 +1,30 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class BubblePainter extends CustomPainter {
-  final bool isUser1;
-  final Color bubbleColor;
+class WaterDropletsPainter extends CustomPainter {
+  final double animationValue;
 
-  BubblePainter({required this.bubbleColor, required this.isUser1});
+  WaterDropletsPainter(this.animationValue);
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = bubbleColor
-      ..style = PaintingStyle.fill;
+    final paint = Paint()
+      ..color = Colors.white
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 2.0;
 
-    Path path = Path();
-    path.lineTo(-5, 0);
-    path.lineTo(0, 10);
-    path.lineTo(5, 0);
+    final dropletRadius = 5.0;
 
+    final dropletX = size.width / 2;
+    final dropletY = size.height * animationValue;
 
-    canvas.drawPath(path, paint);
+    canvas.drawCircle(Offset(dropletX, dropletY), dropletRadius, paint);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 }
